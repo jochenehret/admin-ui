@@ -3,6 +3,10 @@ require 'openssl'
 require 'thread'
 require 'webrick/httprequest'
 require 'webrick/https'
+
+require "rubygems"
+require "xray/thread_dump_signal_handler"
+
 require_relative 'admin/config'
 require_relative 'admin/cc'
 require_relative 'admin/cc_rest_client'
