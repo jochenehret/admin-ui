@@ -43,7 +43,19 @@ rescue => exception
   exit 1
 end
 
-StackProf.run(mode: :cpu, out: 'stackprof-cpu-myapp.dump') do
+profile = StackProf.run(mode: :cpu, out: 'stackprof-cpu-myapp.dump') do
   AdminUI::Admin.new(@config, false).start
 end
 
+puts "Defining 'TTIN' trap to create StackProf report ..."
+trap 'TTIN' do
+  result = StackProf::Report.new(profile)
+  puts
+  result.print_method(/pow|newobj|math/)
+  puts
+  result.print_text
+  puts
+  result.print_graphviz
+  puts
+end
+result.print_debug
