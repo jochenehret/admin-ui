@@ -42,4 +42,7 @@ rescue => exception
   exit 1
 end
 
-AdminUI::Admin.new(@config, false).start
+StackProf.run(mode: :cpu, out: 'tmp/stackprof-cpu-myapp.dump') do
+  AdminUI::Admin.new(@config, false).start
+end
+

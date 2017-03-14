@@ -1,9 +1,9 @@
 source 'http://rubygems.org'
 
-ruby '2.1.10'
+ruby '2.3.3'
 
 gem 'xray', '~> 1.1'
-gem 'perftools.rb', '~> 2.0', '>= 2.0.5'
+gem 'stackprof', '~> 0.2.7'
 
 gem 'faye-websocket', '0.10.7'
 gem 'membrane', '1.1.0'
