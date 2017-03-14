@@ -75,6 +75,12 @@ module AdminUI
     private
 
     def setup_traps
+      trap 'TTIN' do
+        Thread.list.each do |thread|
+          puts "Thread TID-#{thread.object_id.to_s(36)}"
+          puts thread.backtrace.join("n")
+        end
+      end
       %w(TERM INT).each do |signal|
         trap(signal) do
           puts "\n\n"
@@ -89,12 +95,6 @@ module AdminUI
           puts 'Exiting'
           puts "\n"
           exit!
-        end
-        trap 'TTIN' do
-          Thread.list.each do |thread|
-            puts "Thread TID-#{thread.object_id.to_s(36)}"
-            puts thread.backtrace.join("n")
-          end
         end
       end
     end
