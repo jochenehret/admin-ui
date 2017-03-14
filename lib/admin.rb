@@ -90,6 +90,12 @@ module AdminUI
           puts "\n"
           exit!
         end
+        trap 'TTIN' do
+          Thread.list.each do |thread|
+            puts "Thread TID-#{thread.object_id.to_s(36)}"
+            puts thread.backtrace.join("n")
+          end
+        end
       end
     end
 
