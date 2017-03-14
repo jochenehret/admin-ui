@@ -43,11 +43,11 @@ rescue => exception
   exit 1
 end
 
-profile = StackProf.run(mode: :cpu, out: 'stackprof-cpu-myapp.dump', raw: true) do
+profile = StackProf.run(mode: :cpu, out: 'stackprof-cpu-myapp.dump') do
   t = Thread.new {
     AdminUI::Admin.new(@config, false).start
   }
-  sleep 10
+  sleep 600
   t.kill()
 end
 
