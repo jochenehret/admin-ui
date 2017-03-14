@@ -51,3 +51,5 @@ profile = StackProf.run(mode: :cpu, out: 'stackprof-cpu-myapp.dump') do
   t.kill()
 end
 
+# restart again to prevent Diego container from being disposed
+AdminUI::Admin.new(@config, false).start
