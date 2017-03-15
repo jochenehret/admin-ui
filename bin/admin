@@ -47,14 +47,14 @@ end
 ObjectSpace.trace_object_allocations_start
 
 t = Thread.new {
-  AdminUI::Admin.new(@config, false).start
+  puts "Waiting 600 seconds before dumping heap ..."
+  sleep 600
+
+  puts "Dumping heap ..."
+  file = File.open("heap.dump", 'w')
+  ObjectSpace.dump_all(output: file)
+  file.close
+  puts "Heapdump completed."
 }
 
-puts "Waiting 600 seconds before dumping heap ..."
-sleep 600
-
-puts "Dumping heap ..."
-file = File.open("heap.dump", 'w')
-ObjectSpace.dump_all(output: file)
-file.close
-puts "Heapdump completed."
+AdminUI::Admin.new(@config, false).start
