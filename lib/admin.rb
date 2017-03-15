@@ -3,6 +3,7 @@ require 'openssl'
 require 'thread'
 require 'webrick/httprequest'
 require 'webrick/https'
+require 'objspace'
 
 require "rubygems"
 require "xray/thread_dump_signal_handler"
@@ -76,10 +77,9 @@ module AdminUI
 
     def setup_traps
       trap 'TTIN' do
-        Thread.list.each do |thread|
-          puts "Thread TID-#{thread.object_id.to_s(36)}"
-          puts thread.backtrace.join("n")
-        end
+        file = File.open("heap.dump", 'w')
+        ObjectSpace.dump_all(output: file)
+        file.close
       end
       %w(TERM INT).each do |signal|
         trap(signal) do
