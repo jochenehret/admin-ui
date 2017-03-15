@@ -1,6 +1,7 @@
 require 'eventmachine'
 require 'thread'
 require 'yajl'
+require 'objspace'
 
 $LOAD_PATH.unshift File.join(File.dirname(__FILE__), 'dropsonde_protocol')
 require 'envelope.pb.rb'
@@ -347,6 +348,8 @@ module AdminUI
       return unless @running
 
       @logger.debug("[#{@config.doppler_rollup_interval} second interval] Caching doppler component and container data...")
+      @logger.info("container_metrics size: #{ObjectSpace.memsize_of(@container_metrics)}")
+      @logger.info("value_metrics size: #{ObjectSpace.memsize_of(@value_metrics)}")
 
       old_time = Time.now - (@config.doppler_rollup_interval * 4)
       old_ns = old_time.to_i * BILLION
