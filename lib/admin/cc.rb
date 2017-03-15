@@ -834,6 +834,7 @@ module AdminUI
       exists = cache[:exists]
       if exists || exists.nil?
         Sequel.connect(cache[:db_uri], single_threaded: @testing, max_connections: @max_connections) do |connection|
+         begin
           # If we have not yet determined if the table exists
           if exists.nil?
             table = cache[:table]
@@ -877,6 +878,11 @@ module AdminUI
             end
             return result(items)
           end
+
+         ensure
+          connection.disconnect
+          Sequel.synchronize { ::Sequel::DATABASES.delete(connection) }
+         end
         end
       end
 
