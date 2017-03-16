@@ -44,6 +44,10 @@ module AdminUI
       @thread = Thread.new do
         discover
       end
+      
+      @total_event_count = 0
+      @containermetric_count = 0
+      @valuemetric_count = 0
     end
 
     def components
@@ -260,11 +264,20 @@ module AdminUI
 
     def doppler_message(event)
       return unless @running
-      @logger.info("doppler_message event: #{event.inspect}")
-      @logger.info("  event data: #{event.data}")
+      
+      @total_event_count += 1
+
       buffer = ''
       event.data.each do |character|
         buffer += character.chr
+      end
+
+      if buffer.include? 'ContainerMetric'
+        @containermetric_count += 1
+      elsif buffer.include? 'ValueMetric'
+        @valuemetric_count += 1
+      else
+        return
       end
 
       @envelope.clear!
@@ -348,6 +361,8 @@ module AdminUI
     def handle_rollup
       return unless @running
 
+      @logger.info("event statistics: total #{@total_event_count} containermetrics #{@containermetric_count} valuemetrics #{@valuemetric_count}")
+      
       @logger.debug("[#{@config.doppler_rollup_interval} second interval] Caching doppler component and container data...")
       @logger.info("container_metrics size: #{ObjectSpace.memsize_of(@container_metrics)}")
       @logger.info("value_metrics size: #{ObjectSpace.memsize_of(@value_metrics)}")
