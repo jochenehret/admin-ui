@@ -195,7 +195,7 @@ module AdminUI
             @logger.debug('Doppler first message received')
           end
 
-          doppler_message(event)
+          #doppler_message(event)
         end
 
         @doppler_websocket.on :error do |event|
