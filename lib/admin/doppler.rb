@@ -260,7 +260,8 @@ module AdminUI
 
     def doppler_message(event)
       return unless @running
-
+      @logger.info("doppler_message event: #{event.inspect}")
+      @logger.info("  event data: #{event.data}")
       buffer = ''
       event.data.each do |character|
         buffer += character.chr
