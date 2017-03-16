@@ -46,4 +46,13 @@ end
 
 ObjectSpace.trace_object_allocations_start
 
+profile = StackProf.run(mode: :cpu, out: 'stackprof-cpu-myapp.dump') do
+  t = Thread.new {
+    AdminUI::Admin.new(@config, false).start
+  }
+  sleep 300
+  t.kill()
+end
+
+# restart again to prevent Diego container from being disposed
 AdminUI::Admin.new(@config, false).start
